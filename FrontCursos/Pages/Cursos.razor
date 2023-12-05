@@ -25,42 +25,26 @@
 </div>
 
 @code {
-    private FrontCursos.Services.ApiService apiService; // Aquí debería ir la inyección de dependencias
+    private FrontCursos.Services.ApiService apiService; 
+    private List<FrontCursos.Models.Curso> cursos = new List<FrontCursos.Models.Curso>();
 
-    private List<Curso> cursos = new List<Curso>(); // Inicializamos la lista para evitar null
+    [Inject]
+    private HttpClient HttpClient { get; set; }
 
-    // Inyección de dependencias
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        apiService = new FrontCursos.Services.ApiService(new HttpClient()); // Inicializamos apiService
+        apiService = new FrontCursos.Services.ApiService(HttpClient);
     }
 
     private async Task MostrarCursos()
     {
         try
         {
-            if (apiService != null) // Verificamos que apiService no sea nulo antes de usarlo
-            {
-                var apiResponse = await apiService.GetCursos();
-                cursos = System.Text.Json.JsonSerializer.Deserialize<List<Curso>>(apiResponse);
-            }
-            else
-            {
-                Console.WriteLine("Error: ApiService no está inicializado.");
-            }
+            cursos = await apiService.GetCursos();
         }
         catch (Exception ex)
         {
-            // Manejo de errores al obtener los cursos desde la API
             Console.WriteLine($"Error al obtener los cursos: {ex.Message}");
         }
-    }
-
-    public class Curso
-    {
-        public string nombre { get; set; }
-        public string img { get; set; }
-        public string descripcion { get; set; }
-        // Agrega aquí propiedades adicionales del objeto Curso si las hubiera
     }
 }

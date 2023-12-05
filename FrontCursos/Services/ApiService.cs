@@ -1,5 +1,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.Json;
+using FrontCursos.Models;
 
 namespace FrontCursos.Services
 {
@@ -12,12 +15,11 @@ namespace FrontCursos.Services
             this.httpClient = httpClient;
         }
 
-        public async Task<string> GetCursos()
+        public async Task<List<Curso>> GetCursos()
         {
-            // Endpoint para cursos
             var apiResponse = await httpClient.GetStringAsync("http://localhost:5051/api/Curso");
-            return apiResponse;
+            var cursos = JsonSerializer.Deserialize<List<Curso>>(apiResponse);
+            return cursos;
         }
-
     }
 }

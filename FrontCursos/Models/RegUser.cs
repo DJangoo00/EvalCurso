@@ -1,0 +1,7 @@
+namespace FrontCursos.Models;
+public class RegUser
+{
+    public string nombre { get; set; }
+    public string correo { get; set; }
+    public string password { get; set; }
+}
