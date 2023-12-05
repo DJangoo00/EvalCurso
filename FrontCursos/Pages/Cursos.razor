@@ -1,0 +1,66 @@
+﻿@page "/cursos"
+
+<PageTitle>Cursos</PageTitle>
+
+<div>
+    <h1>Cursos</h1>
+
+    <button class="btn btn-primary" @onclick="MostrarCursos">Mostrar Cursos</button>
+
+    <div class="border border-2 rounded card-group m-3">
+        @if (cursos != null)
+        {
+            @foreach (var curso in cursos)
+            {
+                <div class="card m-2 rounded">
+                    <img class="card-img-top" src="@curso.img" alt="Card image cap">
+                    <div class="card-body">
+                        <h4 class="card-title">@curso.nombre</h4>
+                        <p class="card-text">@curso.descripcion</p>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private FrontCursos.Services.ApiService apiService; // Aquí debería ir la inyección de dependencias
+
+    private List<Curso> cursos = new List<Curso>(); // Inicializamos la lista para evitar null
+
+    // Inyección de dependencias
+    protected override async Task OnInitializedAsync()
+    {
+        apiService = new FrontCursos.Services.ApiService(new HttpClient()); // Inicializamos apiService
+    }
+
+    private async Task MostrarCursos()
+    {
+        try
+        {
+            if (apiService != null) // Verificamos que apiService no sea nulo antes de usarlo
+            {
+                var apiResponse = await apiService.GetCursos();
+                cursos = System.Text.Json.JsonSerializer.Deserialize<List<Curso>>(apiResponse);
+            }
+            else
+            {
+                Console.WriteLine("Error: ApiService no está inicializado.");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores al obtener los cursos desde la API
+            Console.WriteLine($"Error al obtener los cursos: {ex.Message}");
+        }
+    }
+
+    public class Curso
+    {
+        public string nombre { get; set; }
+        public string img { get; set; }
+        public string descripcion { get; set; }
+        // Agrega aquí propiedades adicionales del objeto Curso si las hubiera
+    }
+}
