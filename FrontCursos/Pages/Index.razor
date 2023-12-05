@@ -75,6 +75,18 @@
                         </EditForm>
                     </div>
                 </div>
+                @if (registroExitoso)
+                {
+                    <div class="alert alert-success" role="alert">
+                        Registro exitoso. ¡Enhorabuena!
+                    </div>
+                }
+                @if (registroInvalido)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        Registro invalido. Intentelo nuevamente!
+                    </div>
+                }
                 <!--espacio para implementar login-->
             </div>
         </div>
@@ -83,7 +95,9 @@
 @code {
 
     private FrontCursos.Services.ApiService apiService;
-    private FrontCursos.Models.RegUser registerModel = new FrontCursos.Models.RegUser(); // Debes inicializar el modelo
+    private FrontCursos.Models.RegUser registerModel = new FrontCursos.Models.RegUser();
+    private bool registroExitoso = false;
+    private bool registroInvalido = false;
 
     [Inject]
     private HttpClient HttpClient { get; set; }
@@ -93,14 +107,20 @@
         apiService = new FrontCursos.Services.ApiService(HttpClient);
     }
 
-    // ... Tu otro código
-
-    private async Task RegisterUser() // Cambié el tipo de retorno a Task
+    private async Task RegisterUser()
     {
         try
         {
             bool verify = await apiService.Register(registerModel);
-            Console.WriteLine($"Registro exitoso");
+            if (verify)
+            {
+                registroExitoso = true;
+                registerModel = new FrontCursos.Models.RegUser(); // Reiniciar el modelo
+            }
+            else
+            {
+                registroInvalido = true;
+            }
         }
         catch (Exception ex)
         {
