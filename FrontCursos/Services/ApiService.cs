@@ -18,6 +18,9 @@ namespace FrontCursos.Services
             this.httpClient = httpClient;
         }
 
+        //metodos de peticiones http para funcionalidades
+
+        //Cursos
         public async Task<List<Curso>> GetCursos()
         {
             try
@@ -32,8 +35,40 @@ namespace FrontCursos.Services
             }
         }
 
+        public async Task<bool> PostCurso(Curso data)
+        {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/Curso", data);
+                return response.IsSuccessStatusCode;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+        //Tomar Cursos
+
+        //Calificar Cursos
+
+
+        //USERS
         public async Task<bool> Register(RegUser data)
         {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/User/register", data);
+                return response.IsSuccessStatusCode;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> LogIn(RegUser data)
+        {
+            //en desarrollo
             try
             {
                 var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/User/register", data);

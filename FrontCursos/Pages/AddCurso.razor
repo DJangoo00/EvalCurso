@@ -1,0 +1,21 @@
+﻿@page "/addCurso"
+
+<PageTitle>Añadir Curso</PageTitle>
+
+<div>
+
+    <h1>Añadir Curso</h1>
+
+    <p role="status">Current count: @currentCount</p>
+
+    <button class="btn btn-primary" @onclick="IncrementCount">Añadir Curso</button>
+</div>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}

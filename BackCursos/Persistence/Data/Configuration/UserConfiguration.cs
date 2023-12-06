@@ -17,46 +17,48 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.Id)
             .HasColumnName("id");
 
-        builder.Property(e => e.Correo)
-            .IsRequired()
-            .HasMaxLength(100)
-            .HasColumnName("correo");
-
         builder.Property(e => e.Nombre)
             .IsRequired()
             .HasMaxLength(100)
             .HasColumnName("nombre");
+
+        builder.Property(e => e.Correo)
+            .IsRequired()
+            .HasMaxLength(100)
+            .HasColumnName("correo");
 
         builder.Property(e => e.Password)
             .IsRequired()
             .HasMaxLength(255)
             .HasColumnName("password");
 
-        builder
-        .HasMany(d => d.Roles)
-        .WithMany(p => p.Users)
+         builder
+        .HasMany(p => p.Roles)
+        .WithMany(r => r.Users)
         .UsingEntity<UserRole>(
-                
-                r => r.HasOne<Role>()
-                    .WithMany()
-                    .HasForeignKey("idRoleFk")
-                    .HasConstraintName("FK__userrol__idRolFk__3E52440B"),
 
-                l => l.HasOne<User>()
-                    .WithMany()
-                    .HasForeignKey("idUserFk")
-                    .HasConstraintName("FK__userrol__idUserF__3F466844"),
+            j => j
+            .HasOne(pt => pt.Role)
+            .WithMany(t => t.UsersRoles)
+            .HasForeignKey(ut => ut.IdRoleFk),
 
-                j =>
-                {
-                    j.HasKey("idUserFk", "idRoleFk")
-                        .HasName("PK__userrol__48BE068FEF27E1B7");
-                    j.ToTable("userrole");
-                    //j.HasIndex(new[] { "IdUserFk", "IdRolFk" }, "index_3");
-                    //j.IndexerProperty<int>("IdUserFk")
-                    //    .HasColumnName("idUserFk");
-                    //j.IndexerProperty<int>("IdRolFk")
-                    //    .HasColumnName("idRolFk");
-                });
+
+            j => j
+            .HasOne(et => et.User)
+            .WithMany(et => et.UsersRoles)
+            .HasForeignKey(el => el.IdUserFk),
+
+            j =>
+            {
+                j.ToTable("UserRole");
+                j.HasKey(t => new { t.IdUserFk, t.IdRoleFk });
+
+            });
+
+            builder.HasMany(p => p.RefreshTokens)
+            .WithOne(p => p.User)
+            .HasForeignKey(p => p.IdUserFk);
+
+    
+        }
     }
-}

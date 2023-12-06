@@ -9,6 +9,6 @@ namespace Domain.Entities
     {
         public string RoleName {get; set;}
         public ICollection<User> Users { get; set; } = new HashSet<User>();
-        public ICollection<UserRole> RolesUsers { get; set; }
+    public ICollection<UserRole> UsersRoles { get; set; }
     }
 }

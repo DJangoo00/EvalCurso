@@ -82,17 +82,12 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         }
     }
 
-    public int Save()
-    {
-        return _context.SaveChanges();
-    }
-
-    public async Task<int> SaveAsync()
-    {
-        return await _context.SaveChangesAsync();
-    }
     public void Dispose()
-    {
-        _context.Dispose();
-    }
+   {
+       _context.Dispose();
+   }
+   public async Task<int> SaveAsync()
+   {
+       return await _context.SaveChangesAsync();
+   } 
 }

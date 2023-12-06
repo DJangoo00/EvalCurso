@@ -12,7 +12,6 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services;
 public class UserService : IUserService
-
 {
     private readonly JWT _jwt;
     private readonly IUnitOfWork _unitOfWork;
@@ -39,12 +38,13 @@ public class UserService : IUserService
 
         if (existingUser == null)
         {
-            /* var roleDefault = _unitOfWork.Roles
-                                    .Find(u => u.Nombre == Authorization.role_default.ToString())
-                                    .First(); */
+            var rolDefault = _unitOfWork.Roles
+                                        .Find(u => u.RoleName == Authorization.role_default.ToString())
+                                        .First();
             try
             {
-                //user.Roles.Add(roleDefault);
+                user.Roles.Add(rolDefault);
+
                 _unitOfWork.Users.Add(user);
                 await _unitOfWork.SaveAsync();
 
@@ -66,7 +66,7 @@ public class UserService : IUserService
         DataUserDto dataUserDto = new DataUserDto();
         var user = await _unitOfWork.Users
                     .GetByUsernameAsync(model.Nombre);
-
+        Console.WriteLine(user);
         if (user == null)
         {
             dataUserDto.IsAuthenticated = false;
@@ -81,7 +81,7 @@ public class UserService : IUserService
             dataUserDto.IsAuthenticated = true;
             JwtSecurityToken jwtSecurityToken = CreateJwtToken(user);
             dataUserDto.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-            dataUserDto.Nombre = user.Nombre;
+            dataUserDto.UserName = user.Nombre;
             dataUserDto.Roles = user.Roles
                                             .Select(u => u.RoleName)
                                             .ToList();
@@ -177,10 +177,10 @@ public class UserService : IUserService
         dataUserDto.IsAuthenticated = true;
         JwtSecurityToken jwtSecurityToken = CreateJwtToken(usuario);
         dataUserDto.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        /*         dataUserDto.Email = usuario.Email;
-         */
-        dataUserDto.Nombre = usuario.Nombre;
-        dataUserDto.Correo = usuario.Correo;
+        dataUserDto.Email = usuario.Correo;
+
+        dataUserDto.UserName = usuario.Nombre;
+        dataUserDto.Email = usuario.Correo;
         dataUserDto.Roles = usuario.Roles
                                         .Select(u => u.RoleName)
                                         .ToList();
@@ -202,9 +202,9 @@ public class UserService : IUserService
             };
         }
     }
-    private JwtSecurityToken CreateJwtToken(User user)
+    private JwtSecurityToken CreateJwtToken(User usuario)
     {
-        var roles = user.Roles;
+        var roles = usuario.Roles;
         var roleClaims = new List<Claim>();
         foreach (var role in roles)
         {
@@ -212,10 +212,10 @@ public class UserService : IUserService
         }
         var claims = new[]
         {
-                                new Claim(JwtRegisteredClaimNames.Sub, user.Nombre),
+                                new Claim(JwtRegisteredClaimNames.Sub, usuario.Nombre),
                                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                                new Claim(JwtRegisteredClaimNames.Email, user.Correo),
-                                new Claim("uid", user.Id.ToString())
+                                new Claim(JwtRegisteredClaimNames.Email, usuario.Correo),
+                                new Claim("uid", usuario.Id.ToString())
                         }
         .Union(roleClaims);
         var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
@@ -228,4 +228,5 @@ public class UserService : IUserService
             signingCredentials: signingCredentials);
         return jwtSecurityToken;
     }
+
 }

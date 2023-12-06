@@ -109,12 +109,9 @@ namespace Persistence.Data.Migrations
                     b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("IdUserFk");
 
                     b.ToTable("RefreshToken", (string)null);
                 });
@@ -211,34 +208,17 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
                 {
-                    b.Property<int>("idUserFk")
-                        .HasColumnType("int");
-
-                    b.Property<int>("idRoleFk")
+                    b.Property<int>("IdUserFk")
                         .HasColumnType("int");
 
                     b.Property<int>("IdRoleFk")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdUserFk")
-                        .HasColumnType("int");
+                    b.HasKey("IdUserFk", "IdRoleFk");
 
-                    b.Property<int?>("RoleId")
-                        .HasColumnType("int");
+                    b.HasIndex("IdRoleFk");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("idUserFk", "idRoleFk")
-                        .HasName("PK__userrol__48BE068FEF27E1B7");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("idRoleFk");
-
-                    b.ToTable("userrole", (string)null);
+                    b.ToTable("UserRole", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Curso", b =>
@@ -256,7 +236,9 @@ namespace Persistence.Data.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("IdUserFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -291,26 +273,16 @@ namespace Persistence.Data.Migrations
             modelBuilder.Entity("Domain.Entities.UserRole", b =>
                 {
                     b.HasOne("Domain.Entities.Role", "Role")
-                        .WithMany("RolesUsers")
-                        .HasForeignKey("RoleId");
+                        .WithMany("UsersRoles")
+                        .HasForeignKey("IdRoleFk")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany("UsersRoles")
-                        .HasForeignKey("UserId");
-
-                    b.HasOne("Domain.Entities.Role", null)
-                        .WithMany()
-                        .HasForeignKey("idRoleFk")
+                        .HasForeignKey("IdUserFk")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__userrol__idRolFk__3E52440B");
-
-                    b.HasOne("Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("idUserFk")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__userrol__idUserF__3F466844");
+                        .IsRequired();
 
                     b.Navigation("Role");
 
@@ -329,7 +301,7 @@ namespace Persistence.Data.Migrations
 
             modelBuilder.Entity("Domain.Entities.Role", b =>
                 {
-                    b.Navigation("RolesUsers");
+                    b.Navigation("UsersRoles");
                 });
 
             modelBuilder.Entity("Domain.Entities.User", b =>
