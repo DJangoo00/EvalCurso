@@ -40,6 +40,7 @@ namespace FrontCursos.Services
             try
             {
                 var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/Curso", data);
+                Console.WriteLine($"data:{data}");
                 return response.IsSuccessStatusCode;
             }
             catch (System.Exception)
@@ -50,7 +51,19 @@ namespace FrontCursos.Services
         //Tomar Cursos
 
         //Calificar Cursos
-
+        public async Task<bool> RateCurso(RateCurso data)
+        {
+            try
+            {
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/", data);
+                //en desarrollo
+                return response.IsSuccessStatusCode;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+        }
 
         //USERS
         public async Task<bool> Register(RegUser data)

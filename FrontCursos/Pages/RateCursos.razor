@@ -1,0 +1,73 @@
+@page "/ratecurso"
+
+<PageTitle>Añadir Curso</PageTitle>
+<div>
+    <h3>Calificar Curso</h3>
+
+    <EditForm Model="@calification" OnValidSubmit="SubmitForm">
+        <DataAnnotationsValidator />
+
+        <div class="form-group">
+            <label for="userName">Nombre de Usuario:</label>
+            <InputText id="userName" @bind-Value="calification.nombreEstudiante" class="form-control" />
+            <ValidationMessage For="@(() => calification.nombreEstudiante)" />
+        </div>
+
+        <div class="form-group">
+            <label for="courseName">Nombre del Curso:</label>
+            <InputText id="courseName" @bind-Value="calification.nombreCurso" class="form-control" />
+            <ValidationMessage For="@(() => calification.nombreCurso)" />
+        </div>
+
+        <div class="form-group">
+            <label for="comment">Comentario:</label>
+            <InputText id="comment" @bind-Value="calification.comentario" class="form-control" />
+            <ValidationMessage For="@(() => calification.comentario)" />
+        </div>
+
+        <div class="form-group">
+            <label for="score">Puntuación (1-100):</label>
+            <InputNumber id="score" @bind-Value="calification.puntuacion" class="form-control" min="1" max="100" />
+            <ValidationMessage For="@(() => calification.puntuacion)" />
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-2">Enviar Calificación</button>
+    </EditForm>
+</div>
+@code {
+
+    private FrontCursos.Services.ApiService apiService;
+    private FrontCursos.Models.RateCurso calification = new FrontCursos.Models.RateCurso();
+
+    [Inject]
+    private HttpClient HttpClient { get; set; }
+
+    protected override void OnInitialized()
+    {
+        apiService = new FrontCursos.Services.ApiService(HttpClient);
+    }
+
+
+    private async Task SubmitForm()
+    {
+        //en desarrollo
+        try
+        {
+            bool verify = await apiService.RateCurso(calification);
+            if (verify)
+            {
+                Console.WriteLine("Calificacion Exitosa");
+
+                calification = new FrontCursos.Models.RateCurso(); // Reiniciar el modelo
+            }
+            else
+            {
+                Console.WriteLine("Calificacion no Exitosa");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error al registrar usuario: {ex.Message}");
+        }
+    }
+}

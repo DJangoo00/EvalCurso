@@ -21,6 +21,7 @@
                     Nuestros cursos están diseñados para brindarte conocimientos prácticos y experiencia práctica que te
                     ayudarán a alcanzar tus metas en el mundo de la programación.
                 </p>
+                
                 <div id="carouselExampleAutoplaying" class="carousel slide rounded" data-bs-ride="carousel">
                     <div class="carousel-inner rounded">
                         <div class="carousel-item active">
@@ -97,14 +98,14 @@
                             <DataAnnotationsValidator />
                             <ValidationSummary />
                             <div class="mb-3">
-                                <InputText @bind-Value="logInModel.Nombre" class="form-control"
+                                <InputText @bind-Value="logInModel.nombre" class="form-control"
                                     placeholder="Nombre de Usuario" />
-                                <ValidationMessage For="@(() => logInModel.Nombre)" />
+                                <ValidationMessage For="@(() => logInModel.nombre)" />
                             </div>
                             <div class="mb-3">
-                                <InputText @bind-Value="logInModel.Password" class="form-control"
+                                <InputText @bind-Value="logInModel.password" class="form-control"
                                     placeholder="Contraseña" type="password" />
-                                <ValidationMessage For="@(() => logInModel.Password)" />
+                                <ValidationMessage For="@(() => logInModel.password)" />
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
                         </EditForm>

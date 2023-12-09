@@ -1,21 +1,92 @@
-﻿@page "/addCurso"
-
+﻿@page "/addcurso"
 <PageTitle>Añadir Curso</PageTitle>
 
 <div>
+    <div class="container">
+        <div class="row">
+            <!-- Sección de previsualización -->
+            <div class="col-md-6">
+                <div class="card">
+                    <h3 class="card-title">Previsualización del curso</h3>
+                    <div class="card-body">
+                        <h4>@curso.nombre</h4>
+                        <img class="card-img-top" src="@curso.img" alt="Imagen del curso" />
+                        <p>@curso.descripcion</p>
+                    </div>
+                </div>
+            </div>
 
-    <h1>Añadir Curso</h1>
-
-    <p role="status">Current count: @currentCount</p>
-
-    <button class="btn btn-primary" @onclick="IncrementCount">Añadir Curso</button>
+            <!-- Sección del formulario para agregar curso -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title">Agregar Curso</h3>
+                        <EditForm Model="@curso" OnValidSubmit="@AgregarCurso">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+                            <div class="mb-3">
+                                <InputText @bind-Value="curso.nombre" class="form-control"
+                                    placeholder="Nombre del curso" />
+                                <ValidationMessage For="@(() => curso.nombre)" />
+                            </div>
+                            <div class="mb-3">
+                                <InputText @bind-Value="curso.img" class="form-control" placeholder="Url de Img" />
+                                <ValidationMessage For="@(() => curso.img)" />
+                            </div>
+                            <div class="mb-3">
+                                <InputTextArea @bind-Value="curso.descripcion" class="form-control"
+                                    placeholder="Descripcion" />
+                                <ValidationMessage For="@(() => curso.descripcion)" />
+                            </div>
+                            <div class="mb-3">
+                                <InputNumber @bind-Value="curso.idInstructor" class="form-control"
+                                    placeholder="Id del instructor" />
+                                <ValidationMessage For="@(() => curso.idInstructor)" />
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Registrar Curso</button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @code {
-    private int currentCount = 0;
+    private FrontCursos.Services.ApiService apiService;
+    private FrontCursos.Models.Curso curso = new FrontCursos.Models.Curso();
 
-    private void IncrementCount()
+    [Inject]
+    private HttpClient HttpClient { get; set; }
+    protected override void OnInitialized()
     {
-        currentCount++;
+        apiService = new FrontCursos.Services.ApiService(HttpClient);
+    }
+    private async Task AgregarCurso()
+    {
+        try
+        {
+            // Llamada al método del servicio para agregar el curso
+            bool resultado = await apiService.PostCurso(curso);
+            
+            if (resultado)
+            {
+                Console.WriteLine("linea de prueba1");  
+                RegistroExitoso();
+                // Reiniciar el modelo del curso después de agregarlo
+                curso = new FrontCursos.Models.Curso();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Manejo de errores
+            Console.WriteLine($"Error al agregar el curso: {ex.Message}");
+        }
+    }
+
+    private void RegistroExitoso()
+    {
+        // Lógica para mostrar una alerta o modal de éxito
+        Console.WriteLine("Registro Exitoso");
     }
 }

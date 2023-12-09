@@ -1,12 +1,9 @@
-IF EXISTS (SELECT * FROM sys.databases WHERE name = N'cursosdb')
-    DROP DATABASE cursosdb;
+-- CREATE DATABASE cursosdb;
 
-CREATE DATABASE cursosdb;
-
-USE cursosdb;
+-- USE cursosdb;
 
 -- user definition
-CREATE TABLE user (
+CREATE TABLE [user] (
     id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     nombre NVARCHAR(100) NOT NULL,
     correo NVARCHAR(100) NOT NULL,
@@ -14,7 +11,7 @@ CREATE TABLE user (
 );
 
 -- role definition
-CREATE TABLE role (
+CREATE TABLE [role] (
     id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
     roleName NVARCHAR(50) NOT NULL
 );

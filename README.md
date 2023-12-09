@@ -1,13 +1,20 @@
-# Ssekeleton 2.0 API
+# Plataforma de Evaluación de Cursos en Línea
 
-Introduccion y descripcion del proyecto
+Aplicación web que permite a los usuarios acceder a cursos en línea y realizar evaluaciones asociadas. Laplataforma incluye autenticacion para garantizar la privacidad de los usuarios
 
 
-[![GitHub](https://badgen.net/badge/icon/github?icon=github&label)](https://github.com)
-[![.NET](https://img.shields.io/badge/--512BD4?logo=.net&logoColor=ffffff)](https://dotnet.microsoft.com/)
+![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
+![MicrosoftSQLServer](https://img.shields.io/badge/Microsoft%20SQL%20Server-CC2927?style=for-the-badge&logo=microsoft%20sql%20server&logoColor=white)
+![.Net](https://img.shields.io/badge/.NET-5C2D91?style=for-the-badge&logo=.net&logoColor=white)
 [![NuGet](https://badgen.net/badge/icon/nuget?icon=nuget&label)](https://https://nuget.org/)
 [![C#](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=c-sharp&logoColor=white)](https://learn.microsoft.com/es-es/dotnet/csharp/)
-[![GitHub](https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
+
+
+![Blazor](https://img.shields.io/badge/blazor-%235C2D91.svg?style=for-the-badge&logo=blazor&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=for-the-badge&logo=bootstrap&logoColor=white)
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 **Table of Contents**📑
 
@@ -15,130 +22,40 @@ Introduccion y descripcion del proyecto
 
 [TOC]
 
-## Requerimientos Funcionales 🌟
+## Descripcion del proyecto 🌟
 
-Listado de requerimientos
-
-## Consultas Propuestas 📋
-
-1. Listado de consultas propuestas
-
-## Versiones Disponibles 📈
-Versiones implementadas
-
-1. V1.0
-    Caracteristicas de esta version.
-
-2. V1.1
-    Caracteristicas de esta version.
+El proyecto se basa en dos componentes principales, BackEnd y FrontEnd.
+El primero es un proyecto API que se implementa con NETCORE - EntityFramework, estructurado a 4 capas para garantizar su robustes y escalabilidad, su base datos se implementa con Microsoft SQL Server, el archivo del script de la DB se encuentra en la carpeta Db, dentro de BackCursps.
+La segunda es un proyecto Web Assembly con Blazor, lo que permite que el front se ejecute desde el usuario, implementa una estructura por componentes con unica capa. 
 
 
-## Uso 🕹
+## Caracteristicas 📈
 
-Descripcion del uso
-
-**Versionado**
-Para la implementacion de las versiones se puede realizar desde Header como en la imagen o desde Query con la key ver=1.0
-![](./Readme_Img/V1.1.png.png)
-
-
-**Paginado**
-Para realizar la paginación se va al apartado de "Query" y se ingresa lo siguiente:
-![](./Readme_Img/paginado.png.png)
-
-
-### Endpoints de Usuario ⚙️
-**Método**: `POST`
-
-#### 1. Registro de Usuario 🎉
-Este endpoint permite a los usuarios registrarse en el sistema.
-
-**Endpoint**: `http://localhost:5051/api/User/register`
-**Version**: `1.0`
-```JSON
-{
-    "nombre": "<nombre_de_usuario>",
-    "password": "<password>",
-    "correo": "<Email>"
-}
-
-```
-
-#### 2. Generacion de Tokken ⏳
-Una vez registrado el usuario tendrá que ingresar para recibir un token, este será ingresado al siguiente Endpoint que es el de Refresh Token.
-
-**Endpoint**: `http://localhost:5051/api/User/token`
-**Version**: `1.0`
-```JSON
-{
-    "nombre": "<nombre_de_usuario>",
-    "password": "<password>"
-}
-```
-
-####  3. Refresh Token ♻️
-Este endpoint permite actualizar el token el cual expira cada minuto.
-
-Se dejan los mismos datos en el Body y luego se ingresa al "Auth", "Bearer", allí se ingresa el token obtenido en el anterior Endpoint.
-
-**Endpoint**: `http://localhost:5051/api/User/refresh-token`
-**Version**: `1.0`
-
-#### 4. Asignacion de Rol 📜
-Permite asignarle un rol diferente al usuario del predeterminado el cual es "empleado".
-
-**Endpoint**: `http://localhost:5051/api/User/addrole`
-**Version**: `1.0`
-
-```JSON
-{
-    "nombre": "<nombre_de_usuario>",
-    "password": "<password>",
-    "role": "<role>"
-}
-```
-
-**Otros Endpoints**
-
-- Obtener Todos los Usuarios: GET. 🧲
-**Endpoint**: `http://localhost:5051/api//User`
-
-- Obtener Usuario por ID: GET. 🧲
-**Endpoint**: `http://localhost:5051/api/User/{id}`
-
-- Actualizar Usuario: PUT. ⛓
-**Endpoint**: `http://localhost:5051/api/User/{id}`
-
-- Eliminar Usuario: DELETE. 🗑
-**Endpoint**: `http://localhost:5051/api/User/{id}`
-
-
-### Endpoints Especificos ✅
-Para el desarrollo de las consultas se analizaron las variables de estas para dar flexibilidad al desarrollo de estas.
-**Método**: `GET`
-
-
-#### 1. Listado de endpoints especificos.
-**Version**: `1.0`
-**Endpoint**: `URL de endpoint`
-
-**Version**: `1.1`
-**Endpoint**: `URL de endpoint`
+El Proyecto incluye Versionado, RateLimit, JWT
 
 
 
 ## Tecnologias 💻
 
 -   NetCore 7.0
+-   Blazor
 -   MySQL
 -   GitHub
 
 ### Lenguajes Usados 💬
 
 -   C#
+-   Razor
 
 ### Dependencias Usadas 📦
 
+#### Dependencias del FrontEnd
+-   "Microsoft.AspNetCore.Components.WebAssembly"
+-   "Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10"
+-   "Microsoft.AspNetCore.Http" Version="2.2.2"
+-   "Newtonsoft.Json" Version="13.0.3"
+
+#### Dependencias del BackEnd
 -   "AspNetCoreRateLimit" Version="5.0.0"
 -   "AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1"
 -   "Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.12"
@@ -160,4 +77,4 @@ Para el desarrollo de las consultas se analizaron las variables de estas para da
 
 > Estructura General.
 
-![](./Readme_Img/DB-structure.png)
+![](./BackCursos/Db/ScreenShoot.png)
