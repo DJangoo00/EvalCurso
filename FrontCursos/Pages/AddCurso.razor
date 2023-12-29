@@ -39,9 +39,9 @@
                                 <ValidationMessage For="@(() => curso.descripcion)" />
                             </div>
                             <div class="mb-3">
-                                <InputNumber @bind-Value="curso.idInstructor" class="form-control"
+                                <InputNumber @bind-Value="curso.idInstructorFk" class="form-control"
                                     placeholder="Id del instructor" />
-                                <ValidationMessage For="@(() => curso.idInstructor)" />
+                                <ValidationMessage For="@(() => curso.idInstructorFk)" />
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Registrar Curso</button>
                         </EditForm>

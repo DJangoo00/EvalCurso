@@ -38,14 +38,13 @@ public class UserService : IUserService
 
         if (existingUser == null)
         {
-            var rolDefault = _unitOfWork.Roles
-                                        .Find(u => u.RoleName == Authorization.role_default.ToString())
-                                        .First();
+           /*  var rolDefault = _unitOfWork.Roles
+                                    .Find(u => u.RoleName == Authorization.rol_default.ToString())
+                                    .First(); */
             try
             {
-                user.Roles.Add(rolDefault);
-
-                _unitOfWork.Users.Add(user);
+/*                 user.Rols.Add(rolDefault);
+ */                _unitOfWork.Users.Add(user);
                 await _unitOfWork.SaveAsync();
 
                 return $"User  {registerDto.Nombre} has been registered successfully";
@@ -177,8 +176,8 @@ public class UserService : IUserService
         dataUserDto.IsAuthenticated = true;
         JwtSecurityToken jwtSecurityToken = CreateJwtToken(usuario);
         dataUserDto.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
-        dataUserDto.Email = usuario.Correo;
-
+                dataUserDto.Email = usuario.Correo;
+        
         dataUserDto.UserName = usuario.Nombre;
         dataUserDto.Email = usuario.Correo;
         dataUserDto.Roles = usuario.Roles
@@ -228,5 +227,5 @@ public class UserService : IUserService
             signingCredentials: signingCredentials);
         return jwtSecurityToken;
     }
-
+    
 }

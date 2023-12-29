@@ -1,13 +1,25 @@
 ﻿@inherits LayoutComponentBase
 
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
+    <div class="@* @NavMenuCssClass  *@ sidebar">
+        <NavMenu></NavMenu>
     </div>
 
     <main>
         <article class="content px-4">
                 @Body
+                <MainFooter/>
         </article>
     </main>
 </div>
+@code
+{
+    private bool visibleNavMenu = true;
+
+    private string? NavMenuCssClass => visibleNavMenu ? "d-none" : null;
+
+    private void ToggleNavMenu()
+    {
+        visibleNavMenu = !visibleNavMenu;
+    }
+}

@@ -39,8 +39,9 @@ namespace FrontCursos.Services
         {
             try
             {
+                Console.WriteLine($"data:{data.nombre}");
                 var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/Curso", data);
-                Console.WriteLine($"data:{data}");
+                Console.WriteLine("pruebaposterior post");
                 return response.IsSuccessStatusCode;
             }
             catch (System.Exception)
@@ -79,12 +80,12 @@ namespace FrontCursos.Services
             }
         }
 
-        public async Task<bool> LogIn(RegUser data)
+        public async Task<bool> LogIn(LogIn data)
         {
             //en desarrollo
             try
             {
-                var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/User/register", data);
+                var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/User/token", data);
                 return response.IsSuccessStatusCode;
             }
             catch (System.Exception)
