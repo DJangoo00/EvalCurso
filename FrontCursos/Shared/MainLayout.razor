@@ -1,25 +1,38 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthService AuthService
 
 <div class="page">
-    <div class="@* @NavMenuCssClass  *@ sidebar">
+    <div class="@NavMenuCssClass sidebar">
         <NavMenu></NavMenu>
     </div>
 
     <main>
         <article class="content px-4">
-                @Body
-                <MainFooter/>
+            @Body
+            <MainFooter />
         </article>
     </main>
 </div>
-@code
-{
-    private bool visibleNavMenu = true;
 
-    private string? NavMenuCssClass => visibleNavMenu ? "d-none" : null;
+@code {
+    private bool visibleNavMenu = false;
+
+    private string NavMenuCssClass => visibleNavMenu ? "d-none" : null;
 
     private void ToggleNavMenu()
     {
         visibleNavMenu = !visibleNavMenu;
+    }
+
+    protected override void OnInitialized()
+    {
+        AuthService.AuthenticationChanged += UpdateAuthenticationState;
+        UpdateAuthenticationState(AuthService.IsAuthenticated); // Actualiza el estado inicial
+    }
+
+    private void UpdateAuthenticationState(bool isAuthenticated)
+    {
+        visibleNavMenu = !isAuthenticated; // Actualiza la visibilidad del menú basándose en la autenticación
+        StateHasChanged(); // Notifica a Blazor sobre el cambio en el estado para que se actualice la UI
     }
 }

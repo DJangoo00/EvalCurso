@@ -80,13 +80,22 @@ namespace FrontCursos.Services
             }
         }
 
-        public async Task<bool> LogIn(LogIn data)
+        public async Task<TokenModel> LogIn(LogIn data)
         {
-            //en desarrollo
             try
             {
                 var response = await httpClient.PostAsJsonAsync("http://localhost:5051/api/User/token", data);
-                return response.IsSuccessStatusCode;
+                
+                if (response.IsSuccessStatusCode)
+                {
+                    var tokenModel = await response.Content.ReadFromJsonAsync<TokenModel>();
+                    return tokenModel;
+                }
+                else
+                {
+                    // Manejar el caso en el que la solicitud no fue exitosa
+                    return null;
+                }
             }
             catch (System.Exception)
             {

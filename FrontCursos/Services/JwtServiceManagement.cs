@@ -28,13 +28,10 @@ namespace FrontCursos.Services
                 Secure = false, // Si tu aplicación usa HTTPS, establece esto en true
                 SameSite = SameSiteMode.None // Controla la restricción de envío de cookies en solicitudes cross-site
             };
-            Console.WriteLine("Llamado de la función 7");
             if (_httpContextAccessor == null)
             {
-                Console.WriteLine("comprobación null");
             }
             _httpContextAccessor.HttpContext?.Response.Cookies.Append("jwtToken", JsonConvert.SerializeObject(tokenModel), cookieOptions);
-            Console.WriteLine("Llamado de la función 8");
         }
 
         public void RemoveJwtToken()

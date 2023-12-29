@@ -15,6 +15,8 @@ public class Program
         // Configuración del HttpClient
         builder.Services.AddScoped(sp =>
             new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+        builder.Services.AddSingleton<IAuthService, AuthService>();
+
 
         await builder.Build().RunAsync();
     }

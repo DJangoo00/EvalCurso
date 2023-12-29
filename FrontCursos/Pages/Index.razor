@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Forms
+@inject IAuthService AuthService
 <div>
     <h1 class="text-center mt-4">Academia de Programación Online</h1>
 
@@ -110,7 +111,8 @@
                                     placeholder="Contraseña" type="password" />
                                 <ValidationMessage For="@(() => logInModel.password)" />
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+                            <button type="submit" class="btn btn-success btn-block">Ingresar</button>
+                            <button type="button" class="btn btn-warning btn-block" @onclick="LogOut">LogOut</button>
                         </EditForm>
                     </div>
                 </div>
@@ -142,12 +144,14 @@
 };
 
     private FrontCursos.Services.ApiService apiService;
+    private FrontCursos.Services.JwtManagementService jwtManagementService; 
     private FrontCursos.Models.RegUser registerModel = new FrontCursos.Models.RegUser();
     private FrontCursos.Models.LogIn logInModel = new FrontCursos.Models.LogIn();
     private bool registroExitoso = false;
     private bool registroInvalido = false;
     private bool loginExitoso = false;
     private bool loginInvalido = false;
+    public bool IsAuthenticated { get; private set; }
 
     [Inject]
     private HttpClient HttpClient { get; set; }
@@ -155,6 +159,8 @@
     protected override void OnInitialized()
     {
         apiService = new FrontCursos.Services.ApiService(HttpClient);
+        jwtManagementService = new FrontCursos.Services.JwtManagementService();
+        IsAuthenticated = false;
     }
 
     private async Task RegisterUser()
@@ -182,11 +188,14 @@
     {
         //en desarrollo
         try
-        {
-            bool verify = await apiService.LogIn(logInModel);
-            if (verify)
+        {   
+            TokenModel tokenModel = await apiService.LogIn(logInModel);
+            jwtManagementService.SetJwtToken(tokenModel);
+            if (tokenModel.isAuthenticated)
             {
                 loginExitoso = true;
+                IsAuthenticated = tokenModel.isAuthenticated;
+                AuthService.SetAuthentication(true);
                 logInModel = new FrontCursos.Models.LogIn(); // Reiniciar el modelo
             }
             else
@@ -196,7 +205,11 @@
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al registrar usuario: {ex.Message}");
+            Console.WriteLine($"Error en el LogIn usuario: {ex.Message}");
         }
+    }
+    private async Task LogOut()
+    {
+        AuthService.SetAuthentication(false);
     }
 }
